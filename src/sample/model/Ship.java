@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Ship {
 
-    private final List<Mast> ship;
+    private final List<Point> ship;
     private int size;
 
     public Ship() {
@@ -13,8 +13,8 @@ public class Ship {
         size = 0;
     }
 
-    public void addMast(Mast mast) {
-        ship.add(mast);
+    public void addMast(Point point) {
+        ship.add(point);
         size++;
     }
 
@@ -22,17 +22,17 @@ public class Ship {
         return size;
     }
 
-    public Mast getMast(int idx) {
+    public Point getMast(int idx) {
         return ship.get(idx);
     }
 
-    public List<Mast> getShip() {
+    public List<Point> getShip() {
         return ship;
     }
 
-    public boolean containsMast(Mast mast) {
-        for (Mast m : ship) {
-            if (m.equals(mast)) {
+    public boolean containsMast(Point point) {
+        for (Point m : ship) {
+            if (m.equals(point)) {
                 return true;
             }
         }

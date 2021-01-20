@@ -22,17 +22,17 @@ public class Board {
         return ships;
     }
 
-    public List<Mast> getAllMasts() {
-        List<Mast> masts = new ArrayList<>();
+    public List<Point> getAllMasts() {
+        List<Point> points = new ArrayList<>();
         for (var ship : ships) {
-            masts.addAll(ship.getShip());
+            points.addAll(ship.getShip());
         }
-        return masts;
+        return points;
     }
 
-    public boolean containsMast(Mast mast) {
+    public boolean containsMast(Point point) {
         for (var ship : ships) {
-            if (ship.containsMast(mast)) {
+            if (ship.containsMast(point)) {
                 return true;
             }
         }

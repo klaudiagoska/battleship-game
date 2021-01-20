@@ -1,8 +1,7 @@
 package sample.controller;
 
 import javafx.event.ActionEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import sample.model.Player;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +15,8 @@ public class Start extends GameController {
     }
 
     public void goTo(ActionEvent actionEvent) throws IOException {
-        goTo(actionEvent, "../view/name.fxml");
+        setPlayer(new Player(true));
+        setEnemy(new Player(false));
+        goTo(actionEvent, "../view/createBoard.fxml");
     }
 }

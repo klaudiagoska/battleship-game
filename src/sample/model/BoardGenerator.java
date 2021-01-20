@@ -16,27 +16,27 @@ public class BoardGenerator {
     }
 
     private void placeShip(Ship ship) {
-        for (Mast mast : ship.getShip()) {
-            board[mast.getX()].setCharAt(mast.getY(), '#');
+        for (Point point : ship.getShip()) {
+            board[point.getX()].setCharAt(point.getY(), '#');
         }
     }
 
-    private boolean notWater(Mast mast) {
-        return board[mast.getX()].charAt(mast.getY()) != '.';
+    private boolean notWater(Point point) {
+        return board[point.getX()].charAt(point.getY()) != '.';
     }
 
     private boolean notAvailableLocation(Ship ship, int x, int y) {
-        Mast mast = new Mast(x, y);
-        if (mast.correctCoordinates()) {
-            if (notContainsMast(ship, mast)) {
-                return notWater(mast);
+        Point point = new Point(x, y);
+        if (point.correctCoordinates()) {
+            if (notContainsMast(ship, point)) {
+                return notWater(point);
             }
         }
         return false;
     }
 
-    private boolean checkAroundMast(Ship ship, Mast mast) {
-        int x = mast.getX(), y = mast.getY();
+    private boolean checkAroundMast(Ship ship, Point point) {
+        int x = point.getX(), y = point.getY();
         if (notAvailableLocation(ship, x, y - 1)) {
             return false;
         }
@@ -65,35 +65,35 @@ public class BoardGenerator {
     }
 
     private boolean checkShip(Ship ship) {
-        for (Mast mastToCheck : ship.getShip()) {
-            if (!mastToCheck.correctCoordinates()) {
+        for (Point pointToCheck : ship.getShip()) {
+            if (!pointToCheck.correctCoordinates()) {
                 return false;
             }
-            if (notWater(mastToCheck)) {
+            if (notWater(pointToCheck)) {
                 return false;
             }
-            if (!checkAroundMast(ship, mastToCheck)) {
+            if (!checkAroundMast(ship, pointToCheck)) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean notContainsMast(Ship ship, Mast mast) {
-        return !ship.containsMast(mast);
+    private boolean notContainsMast(Ship ship, Point point) {
+        return !ship.containsMast(point);
     }
 
     private boolean addMast(Ship ship, int x, int y) {
-        Mast newMast = new Mast(x, y);
-        if (notContainsMast(ship, newMast)) {
-            ship.addMast(newMast);
+        Point newPoint = new Point(x, y);
+        if (notContainsMast(ship, newPoint)) {
+            ship.addMast(newPoint);
             return true;
         }
         return false;
     }
 
-    private void addToShip(Ship ship, Mast mast) {
-        int x = mast.getX(), y = mast.getY();
+    private void addToShip(Ship ship, Point point) {
+        int x = point.getX(), y = point.getY();
         boolean success = false;
         while (!success) {
             int whichSide = (int) (Math.random() * 4);
@@ -116,7 +116,7 @@ public class BoardGenerator {
 
     private Ship createShip(int size) {
         Ship ship = new Ship();
-        ship.addMast(new Mast());
+        ship.addMast(new Point());
         while (size != ship.getSize()) {
             int addToThisMast = (int) (Math.random() * ship.getSize());
             addToShip(ship, ship.getMast(addToThisMast));

@@ -2,23 +2,18 @@ package sample.model;
 
 public class Player {
 
-
-    private final String name;
-    private Board board;
     private int points;
     public boolean turn;
+    private Board board;
 
-    public Player() {
-        name = "Computer";
+    public Player(boolean player) {
         points = 0;
-        createBoard();
-        turn = false;
-    }
-
-    public Player(String name) {
-        this.name = name;
-        points = 0;
-        turn = true;
+        if (player) {
+            turn = true;
+        } else {
+            turn = false;
+            createBoard();
+        }
     }
 
     public void createBoard() {
@@ -27,10 +22,6 @@ public class Player {
 
     public void addPoint() {
         points++;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getPoints() {
