@@ -2,15 +2,15 @@ package sample.model;
 
 import javafx.scene.layout.Pane;
 
-public class Mast extends Pane {
+public class Point extends Pane {
     private final int x, y;
 
-    public Mast() {
+    public Point() {
         x = (int) (Math.random() * 10);
         y = (int) (Math.random() * 10);
     }
 
-    public Mast(int x, int y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -43,8 +43,8 @@ public class Mast extends Pane {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        Mast mast = (Mast) obj;
-        return x == mast.x && y == mast.y;
+        Point point = (Point) obj;
+        return x == point.x && y == point.y;
     }
 
 }

@@ -2,7 +2,7 @@ package sample.controller;
 
 import javafx.event.ActionEvent;
 import javafx.scene.layout.GridPane;
-import sample.model.Mast;
+import sample.model.Point;
 import sample.model.Player;
 
 import java.io.IOException;
@@ -15,19 +15,19 @@ public class Game extends GameController {
 
     public GridPane playerBoard;
     public GridPane enemyBoard;
-    private final List<Mast> enemyShots = new ArrayList<>();
+    private final List<Point> enemyShots = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initPlayerBoard();
         initEnemyBoard();
-        alert("Game is starting...", "You can start your game! Good luck!");
+        alert("You can start your game! Good luck!");
     }
 
     private void initPlayerBoard() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                addToGrid(playerBoard, new Mast(i, j));
+                addToGrid(playerBoard, new Point(i, j));
             }
         }
         addMastsToPlayerBoard(playerBoard);
@@ -36,76 +36,95 @@ public class Game extends GameController {
     private void initEnemyBoard() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                Mast mast = new Mast(i, j);
-                mast.setOnMouseClicked(mouseEvent -> playerMove(mast));
-                addToGrid(enemyBoard, mast);
+                Point point = new Point(i, j);
+                point.setOnMouseClicked(mouseEvent -> playerMove(point));
+                addToGrid(enemyBoard, point);
             }
         }
     }
 
-    public void playerMove(Mast mast) {
-        boolean shot;
-        if (getFirstPlayer().turn) {
-            if (getSecondPlayer().getBoard().containsMast(mast)) {
-                shot = true;
-                addPoint(getFirstPlayer());
+    public void playerMove(Point point) {
+        if (getPlayer().turn) {
+            if (getEnemy().getBoard().containsMast(point)) {
+                playerHit(point);
             } else {
-                shot = false;
-                getFirstPlayer().turn = false;
-                enemyMove();
+                playerMiss(point);
             }
-            changeMastOnEnemyBoard(mast, shot);
         }
     }
 
     public void enemyMove() {
-        Mast mast = getCorrectMast();
-        boolean shot;
-        if (getFirstPlayer().getBoard().containsMast(mast)) {
-            shot = true;
-            addPoint(getSecondPlayer());
-            enemyMove();
+        Point point = getRandomShot();
+        if (getPlayer().getBoard().containsMast(point)) {
+            enemyHit(point);
         } else {
-            shot = false;
-            getFirstPlayer().turn = true;
+            enemyMiss(point);
         }
-        changeMastOnPlayerBoard(mast, shot);
+    }
+
+    private void playerHit(Point point) {
+        addPoint(getPlayer());
+        changePointOnEnemyBoard(point, true);
+        if (getPlayer().isWinner()) {
+            victory();
+        }
+    }
+
+    private void playerMiss(Point point) {
+        getPlayer().turn = false;
+        changePointOnEnemyBoard(point, false);
+        enemyMove();
+    }
+
+    private void enemyHit(Point point) {
+        addPoint(getEnemy());
+        changePointOnPlayerBoard(point, true);
+        if (getEnemy().isWinner()) {
+            defeat();
+        }
+        enemyMove();
+    }
+
+    private void enemyMiss(Point point) {
+        changePointOnPlayerBoard(point, false);
+        getPlayer().turn = true;
     }
 
     private void addPoint(Player player) {
         player.addPoint();
-        checkVictory(player);
     }
 
-    private void changeMastOnPlayerBoard(Mast mast, boolean shot) {
-        mast.changeColor(shot);
-        addToGrid(playerBoard, mast);
+    private void changePointOnPlayerBoard(Point point, boolean shot) {
+        point.changeColor(shot);
+        addToGrid(playerBoard, point);
     }
 
-    private void changeMastOnEnemyBoard(Mast mast, boolean shot) {
-        mast.changeColor(shot);
-        addToGrid(enemyBoard, new Mast(mast.getX(), mast.getY()));
+    private void changePointOnEnemyBoard(Point point, boolean shot) {
+        point.changeColor(shot);
+        addToGrid(enemyBoard, new Point(point.getX(), point.getY()));
     }
 
-    private void addToGrid(GridPane gridPane, Mast mast) {
-        GridPane.setRowIndex(mast, mast.getX());
-        GridPane.setColumnIndex(mast, mast.getY());
-        gridPane.getChildren().add(mast);
+    private void addToGrid(GridPane gridPane, Point point) {
+        GridPane.setRowIndex(point, point.getX());
+        GridPane.setColumnIndex(point, point.getY());
+        gridPane.getChildren().add(point);
     }
 
-    private Mast getCorrectMast() {
-        Mast mast = new Mast();
-        while (enemyShots.contains(mast)) {
-            mast = new Mast();
+    private Point getRandomShot() {
+        Point point = new Point();
+        while (enemyShots.contains(point)) {
+            point = new Point();
         }
-        enemyShots.add(mast);
-        return mast;
+        enemyShots.add(point);
+        return point;
     }
 
-    private void checkVictory(Player player) {
-        if (player.isWinner()) {
-            alert("Victory!", player.getName() + " wins!");
-        }
+    private void victory() {
+        alert("You are the winner!!!");
+    }
+
+    private void defeat() {
+        alert("Computer is the winner!");
     }
 
     public void endGame(ActionEvent actionEvent) {
@@ -113,6 +132,6 @@ public class Game extends GameController {
     }
 
     public void restart(ActionEvent actionEvent) throws IOException {
-        goTo(actionEvent, "../view/name.fxml");
+        goTo(actionEvent, "../view/createBoard.fxml");
     }
 }

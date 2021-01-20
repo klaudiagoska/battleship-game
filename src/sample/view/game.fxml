@@ -63,7 +63,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="423.0" layoutY="38.0" prefHeight="26.0" prefWidth="143.0" text="Enemy's board" textAlignment="RIGHT">
+      <Label alignment="CENTER_RIGHT" layoutX="423.0" layoutY="38.0" prefHeight="26.0" prefWidth="143.0" text="Computer's board" textAlignment="RIGHT">
          <font>
             <Font size="15.0" />
          </font>
